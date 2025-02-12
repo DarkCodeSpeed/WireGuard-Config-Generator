@@ -4,32 +4,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WireGuard Config Generator</title>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
+        /* General Styles */
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #f4f6f8;
+            background-color: #f9fafb;
             margin: 0;
             padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            color: #333333;
+            line-height: 1.6;
         }
         .container {
-            background: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-width: 1200px;
             width: 100%;
-            max-width: 550px;
-            padding: 30px;
+            margin: 20px auto;
+            padding: 0 15px;
             box-sizing: border-box;
         }
-        h2 {
+        h1 {
             text-align: center;
-            color: #333333;
-            margin-bottom: 20px;
+            color: #2c3e50;
             font-size: 24px;
-            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        h2 {
+            font-size: 18px;
+            color: #34495e;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        p {
+            font-size: 14px;
+            color: #555555;
         }
         label {
             display: block;
@@ -40,7 +51,7 @@
         input[type="text"],
         input[type="number"] {
             width: 100%;
-            padding: 14px;
+            padding: 12px;
             margin-top: 8px;
             border: 1px solid #cccccc;
             border-radius: 8px;
@@ -70,7 +81,7 @@
         }
         textarea {
             width: 100%;
-            height: 180px;
+            height: 150px;
             margin-top: 20px;
             padding: 14px;
             border: 1px solid #cccccc;
@@ -100,24 +111,109 @@
         .footer a:hover {
             text-decoration: underline;
         }
+        .features-list {
+            list-style: disc;
+            padding-left: 20px;
+            margin-top: 10px;
+        }
+        .features-list li {
+            margin-bottom: 8px;
+        }
+        .section-divider {
+            margin: 20px 0;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        /* Icon Styling */
+        .icon {
+            margin-right: 8px;
+            color: #007bff;
+        }
+
+        /* Responsive Design */
+        @media (min-width: 768px) {
+            .container {
+                flex-direction: row;
+                gap: 30px;
+            }
+            .main-section {
+                flex: 2;
+            }
+            .side-section {
+                flex: 1;
+            }
+            h1 {
+                font-size: 28px;
+            }
+            h2 {
+                font-size: 20px;
+            }
+            textarea {
+                height: 180px;
+            }
+        }
+
+        /* Mobile-Specific Adjustments */
+        @media (max-width: 767px) {
+            .container {
+                padding: 0 10px;
+            }
+            input[type="text"],
+            input[type="number"],
+            button,
+            textarea {
+                font-size: 14px;
+            }
+            h1 {
+                font-size: 22px;
+            }
+            h2 {
+                font-size: 16px;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>WireGuard Config Generator</h2>
-        <label for="configName">Config Name:</label>
-        <input type="text" id="configName" placeholder="Enter config name">
-        <label for="dataLimit">Data Limit (GB):</label>
-        <input type="number" id="dataLimit" placeholder="Enter data limit (GB)">
-        <label for="daysLimit">Time Limit (Days):</label>
-        <input type="number" id="daysLimit" placeholder="Enter time limit (days)">
-        <button onclick="generateConfig()">Generate Config</button>
-        <textarea id="output" readonly></textarea>
-        <div class="footer">
-            © 2023 WireGuard Config Generator. All rights reserved. 
-            <a href="https://wireguard.com" target="_blank">Learn More</a>
+        <!-- Main Section -->
+        <div class="main-section">
+            <h1><i class="fa-solid fa-gear icon"></i> WireGuard Config Generator</h1>
+            <p>A powerful tool to generate WireGuard configuration files effortlessly.</p>
+
+            <!-- Input Section -->
+            <h2><i class="fa-solid fa-pencil icon"></i> Create Your Configuration</h2>
+            <label for="configName"><i class="fa-solid fa-file-signature icon"></i> Config Name:</label>
+            <input type="text" id="configName" placeholder="Enter config name">
+            <label for="dataLimit"><i class="fa-solid fa-database icon"></i> Data Limit (GB):</label>
+            <input type="number" id="dataLimit" placeholder="Enter data limit (GB)">
+            <label for="daysLimit"><i class="fa-solid fa-clock icon"></i> Time Limit (Days):</label>
+            <input type="number" id="daysLimit" placeholder="Enter time limit (days)">
+            <button onclick="generateConfig()"><i class="fa-solid fa-download icon"></i> Generate Config</button>
+            <textarea id="output" readonly></textarea>
+        </div>
+
+        <!-- Side Section -->
+        <div class="side-section">
+            <!-- Why Use This Tool? -->
+            <h2><i class="fa-solid fa-check-circle icon"></i> Why Use This Tool?</h2>
+            <ul class="features-list">
+                <li><i class="fa-solid fa-check icon"></i> <strong>Easy to Use:</strong> Simple interface for generating WireGuard configs.</li>
+                <li><i class="fa-solid fa-check icon"></i> <strong>Customizable:</strong> Set data limits, time limits, and more.</li>
+                <li><i class="fa-solid fa-check icon"></i> <strong>Randomized IPs:</strong> Automatically generates random IPv4 and IPv6 addresses.</li>
+                <li><i class="fa-solid fa-check icon"></i> <strong>Downloadable:</strong> Instantly download your generated config file.</li>
+            </ul>
+
+            <!-- About the Creator -->
+            <div class="section-divider"></div>
+            <h2><i class="fa-solid fa-user icon"></i> About the Creator</h2>
+            <p>
+                This tool was developed by <strong>Kolin</strong>, a passionate gamer and developer, to assist streamers and gamers in optimizing their online experience.
+                If you'd like to support Kolin's work, you can visit his PUBG profile using the username 
+                <a href="https://pubg.com" target="_blank"><i class="fa-brands fa-pubg icon"></i> 5155244232</a>. Your support means a lot!
+            </p>
         </div>
     </div>
+
     <script>
         function getRandomIPv4() {
             return '8.' + Math.floor(Math.random() * 256) + '.' + Math.floor(Math.random() * 256) + '.' + Math.floor(Math.random() * 256) + '/32';
@@ -159,12 +255,17 @@
             config += `[Peer]\nPublicKey = ${publicKey}\nAllowedIPs = ${getRandomAllowedIPs()}`;
             config += `Endpoint = ${endpoint}\nPersistentKeepalive = 1\n\n`;  // Moved PersistentKeepalive here
             document.getElementById('output').value = config;
-            const element = document.createElement('a');
-            const file = new Blob([config], { type: 'text/plain' });
-            element.href = URL.createObjectURL(file);
-            element.download = `${configName}.conf`;
-            document.body.appendChild(element); 
-            element.click();
+
+            // Create and trigger download
+            const blob = new Blob([config], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${configName}.conf`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url); // Clean up the URL object
         }
     </script>
 </body>
