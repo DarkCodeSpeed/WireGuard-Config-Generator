@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WireGuard Config Generator</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 550px;
+            padding: 30px;
+            box-sizing: border-box;
+        }
+        h2 {
+            text-align: center;
+            color: #333333;
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: 700;
+        }
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: 600;
+            color: #444444;
+        }
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: 14px;
+            margin-top: 8px;
+            border: 1px solid #cccccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+        input[type="text"]:focus,
+        input[type="number"]:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+        button {
+            width: 100%;
+            padding: 14px;
+            margin-top: 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        textarea {
+            width: 100%;
+            height: 180px;
+            margin-top: 20px;
+            padding: 14px;
+            border: 1px solid #cccccc;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            resize: vertical;
+            background-color: #f9f9f9;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
+        }
+        textarea:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+        .footer {
+            margin-top: 25px;
+            text-align: center;
+            font-size: 12px;
+            color: #888888;
+        }
+        .footer a {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>WireGuard Config Generator</h2>
+        <label for="configName">Config Name:</label>
+        <input type="text" id="configName" placeholder="Enter config name">
+        <label for="dataLimit">Data Limit (GB):</label>
+        <input type="number" id="dataLimit" placeholder="Enter data limit (GB)">
+        <label for="daysLimit">Time Limit (Days):</label>
+        <input type="number" id="daysLimit" placeholder="Enter time limit (days)">
+        <button onclick="generateConfig()">Generate Config</button>
+        <textarea id="output" readonly></textarea>
+        <div class="footer">
+            © 2023 WireGuard Config Generator. All rights reserved. 
+            <a href="https://wireguard.com" target="_blank">Learn More</a>
+        </div>
+    </div>
+    <script>
+        function getRandomIPv4() {
+            return '8.' + Math.floor(Math.random() * 256) + '.' + Math.floor(Math.random() * 256) + '.' + Math.floor(Math.random() * 256) + '/32';
+        }
+        function getRandomIPv6() {
+            const hexChars = '0123456789abcdef';
+            const randomSegment = () => Array(4).fill(0).map(() => hexChars[Math.floor(Math.random() * hexChars.length)]).join('');
+            return 'b4a7::f900:' + randomSegment() + ':' + randomSegment() + '/32';
+        }
+        function getRandomIPv6DNS() {
+            const hexChars = '0123456789abcdef';
+            const randomSegment = () => Array(4).fill(0).map(() => hexChars[Math.floor(Math.random() * hexChars.length)]).join('');
+            return '1a1f::3789:' + randomSegment() + ':' + randomSegment();
+        }
+        function getRandomEndpoint() {
+            const ip = Math.floor(Math.random() * 256) + '.' + Math.floor(Math.random() * 256) + '.' + Math.floor(Math.random() * 256) + '.' + Math.floor(Math.random() * 256);
+            const port = Math.floor(Math.random() * (65535 - 1024 + 1)) + 1024; // Random port between 1024 and 65535
+            return { endpoint: ip + ':' + port, port: port };
+        }
+        function getRandomAllowedIPs() {
+            let ips = '';
+            for (let j = 0; j < 10; j++) {
+                ips += getRandomIPv4() + (j < 9 ? ', ' : '\n');
+            }
+            return ips;
+        }
+        function generateConfig() {
+            const configName = document.getElementById('configName').value || 'wg_config';
+            const dataLimit = document.getElementById('dataLimit').value || 10;
+            const daysLimit = document.getElementById('daysLimit').value || 30;
+            const privateKey = 'bcD0qj5Djp18HS2nfmHbg12xtVbEHqtUIL2ZxmUdjg0=';
+            const publicKey = 'ljizHABvty/yXGj0wRKRN5VGwV2nrD4u5t7S3KhUuHs=';
+            const { endpoint, port } = getRandomEndpoint(); // Random endpoint and port
+            const dns1 = '78.157.42.100'; // Fixed DNS 1
+            const dns2 = '78.157.42.101'; // Fixed DNS 2
+            const mtu = 1300;
+            let config = `[Interface]\nPrivateKey = ${privateKey}\nAddress = ${getRandomIPv4()}, ${getRandomIPv6()}\nDNS = ${dns1}, ${dns2}, ${getRandomIPv6DNS()}, ${getRandomIPv6DNS()}\nMTU = ${mtu}\nListenPort = ${port}\n\n`;
+            // Adding a single Peer
+            config += `[Peer]\nPublicKey = ${publicKey}\nAllowedIPs = ${getRandomAllowedIPs()}`;
+            config += `Endpoint = ${endpoint}\nPersistentKeepalive = 1\n\n`;  // Moved PersistentKeepalive here
+            document.getElementById('output').value = config;
+            const element = document.createElement('a');
+            const file = new Blob([config], { type: 'text/plain' });
+            element.href = URL.createObjectURL(file);
+            element.download = `${configName}.conf`;
+            document.body.appendChild(element); 
+            element.click();
+        }
+    </script>
+</body>
+</html>
